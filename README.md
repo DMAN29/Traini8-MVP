@@ -1,94 +1,167 @@
-# Training Center Management System
+# Traini8-MVP
 
-This project is a Spring Boot application that integrates with MongoDB to manage training centers.
+## Project Setup Instructions
 
-## Prerequisites
+### Prerequisites
 
-- Java 17 or later
-- Maven 3.6+
-- MongoDB (local or cloud)
+- Install Java 17 or later
+- Install Maven
+- Install MongoDB (Local or Cloud)
+- Install an IDE (IntelliJ IDEA, Eclipse, or VS Code)
 
-## Setup Instructions
+### Clone the Repository
 
-### 1. Clone the Repository
 ```sh
-git clone https://github.com/DMAN29/Traini8-MVP.git
-cd <your-project-folder>
+    git clone https://github.com/DMAN29/Traini8-MVP.git
+    cd Traini8-MVP
 ```
 
-### 2. Configure Application Properties
-Edit `src/main/resources/application.properties`:
+### Configure MongoDB
+
+Update the `application.properties` file with your MongoDB connection details:
+
 ```properties
 spring.application.name=Traini8-MVP
 server.port=5000
 spring.data.mongodb.database=timeStudy
-spring.data.mongodb.uri=<your-mongodb-uri>
+spring.data.mongodb.uri=your_mongodb_uri_here
 ```
-Replace `<your-mongodb-uri>` with your actual MongoDB connection string.
 
-### 3. Build and Run the Application
+**Note:** MongoDB will automatically create the database when the first write operation occurs.
+
+### Build and Run the Project
+
 ```sh
 mvn clean install
 mvn spring-boot:run
 ```
 
-### 4. API Endpoints
+### API Endpoints
 
 #### Add a Training Center
+
 ```http
-POST /training-center
+POST http://localhost:5000/training-center
 ```
-**Body (JSON Example):**
+
+**Request Body:**
+
 ```json
 {
-  "centerName": "Tech Academy",
-  "centerCode": "TCA1234567890",
+  "centerName": "ABC Training Center",
+  "centerCode": "ABC123XYZ789",
   "address": {
     "detailedAddress": "123 Main Street",
     "city": "Noida",
     "state": "Uttar Pradesh",
     "pincode": "201301"
   },
-  "studentCapacity": 100,
+  "studentCapacity": 200,
   "coursesOffered": ["Java", "Spring Boot"],
-  "contactEmail": "info@techacademy.com",
+  "contactEmail": "abc@example.com",
   "contactPhone": "9876543210"
 }
 ```
 
-#### Get All Training Centers
+**Response:**
+
+```json
+{
+  "id": "65d1a3e8c2b47d001b3e1234",
+  "centerName": "ABC Training Center",
+  "centerCode": "ABC123XYZ789",
+  "address": {
+    "detailedAddress": "123 Main Street",
+    "city": "Noida",
+    "state": "Uttar Pradesh",
+    "pincode": "201301"
+  },
+  "studentCapacity": 200,
+  "coursesOffered": ["Java", "Spring Boot"],
+  "contactEmail": "abc@example.com",
+  "contactPhone": "9876543210"
+}
+```
+
+#### Get Training Centers (Filtered Examples)
+
+**Filter by City:**
+
 ```http
-GET /training-center
+GET http://localhost:5000/training-center?city=Noida
 ```
-Supports optional filters like `centerName`, `city`, `state`, `pincode`, `course`, etc.
 
-**Example Filtered Requests:**
-- Get centers in Noida:
-  ```http
-  GET /training-center?city=Noida
-  ```
-- Get centers with student capacity of at least 50:
-  ```http
-  GET /training-center?studentCapacity=50
-  ```
-- Get centers offering Java:
-  ```http
-  GET /training-center?course=Java
-  ```
+**Response:**
 
-### 5. Run with Docker
-#### Build Docker Image
+```json
+[
+  {
+    "id": "65d1a3e8c2b47d001b3e1234",
+    "centerName": "ABC Training Center",
+    "centerCode": "ABC123XYZ789",
+    "address": {
+      "detailedAddress": "123 Main Street",
+      "city": "Noida",
+      "state": "Uttar Pradesh",
+      "pincode": "201301"
+    },
+    "studentCapacity": 200,
+    "coursesOffered": ["Java", "Spring Boot"],
+    "contactEmail": "abc@example.com",
+    "contactPhone": "9876543210"
+  }
+]
+```
+
+**Filter by Student Capacity:**
+
+```http
+GET http://localhost:5000/training-center?studentCapacity=100
+```
+
+**Response:**
+
+```json
+[]
+```
+
+**Filter by Course Offered:**
+
+```http
+GET http://localhost:5000/training-center?course=Java
+```
+
+**Response:**
+
+```json
+[
+  {
+    "id": "65d1a3e8c2b47d001b3e1234",
+    "centerName": "ABC Training Center",
+    "centerCode": "ABC123XYZ789",
+    "address": {
+      "detailedAddress": "123 Main Street",
+      "city": "Noida",
+      "state": "Uttar Pradesh",
+      "pincode": "201301"
+    },
+    "studentCapacity": 200,
+    "coursesOffered": ["Java", "Spring Boot"],
+    "contactEmail": "abc@example.com",
+    "contactPhone": "9876543210"
+  }
+]
+```
+
+### Running Tests
+
+To run tests:
+
 ```sh
-docker build -t training-center-app .
-```
-#### Run the Container
-```sh
-docker run -p 5000:5000 training-center-app
+mvn test
 ```
 
-## Deployment
-To deploy on a cloud service, configure your MongoDB URI and update `application.properties` accordingly.
+### License
 
----
-For further support, contact the development team.
+This project is licensed under the MIT License.
 
